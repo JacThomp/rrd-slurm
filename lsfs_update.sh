@@ -15,13 +15,11 @@ for FILENAME in $FILE_SYSTEMS; do
 	    RRA:AVERAGE:0.5:24:84 \
 	    RRA:AVERAGE:0.5:288:93 \
     fi
-done
 
 #1 Day, 20 minute increments
 #1 Week, 2 hour increments
 #3 Mo., 1 day increments
 
-for FILENAME in $FILE_SYSTEMS; do
       used=$(mmlsfs all | awk -v P=$FILENAME '$1 == P {print $12}') ##Inodes used
       max=$(mmlsfs all | awk -v P=$FILENAME '$1 == P {print $11}') ##Maximum Inodes
       avail=$($max-$used) ##Available Inodes
