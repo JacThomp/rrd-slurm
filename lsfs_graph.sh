@@ -1,12 +1,13 @@
 #!/bin/bash
 
 RRDNAME_TEMPLATE="GPFS_INODE_"
+FILE_SYSTEMS=$(mmlsfs all | awk $1~/^(?!Name).*$ '{print $1}')
 IMGTYPE="PNG"
 COL_RED="#ff0000"
 COL_GREEN="#00ff00"
 COL_BLUE="#0000ff"
 
-for FILENAME in 'mmlsfs all | awk $1~/^(?!Name).*$ '{print $1}''; do
+for FILENAME in $FILE_SYSTEMS; do
     OUTFILE=$RRDNAME_TEMPLATE$FILENAME
 
 #One Day

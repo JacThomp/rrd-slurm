@@ -3,8 +3,9 @@
 #creates the rrds if they don't exist
 
 RRDNAME_TEMPLATE="GPFS_INODE_"
+FILE_SYSTEMS=$(mmlsfs all | awk $1~/^(?!Name).*$ '{print $1}')
 
-for FILENAME in 'mmlsfs all | awk $1~/^(?!Name).*$ '{print $1}''; do
+for FILENAME in $FILE_SYSTEMS; do
     if [ ! -f $RRDNAME_TEMPLATE$FILENAME".rrd" ]; then
         rrdtool create $RRDNAME_TEMPLATE$FILENAME".rrd" \
 	    DS:Used:GAUGE:3600:U:U \
@@ -20,7 +21,7 @@ done
 #1 Week, 2 hour increments
 #3 Mo., 1 day increments
 
-for FILENAME in 'mmlsfs all | awk $1~/^(?!Name).*$ '{print $1}''; do
+for FILENAME in $FILE_SYSTEMS; do
       used=$(mmlsfs all | awk -v P=$FILENAME '$1 == P {print $12}') ##Inodes used
       max=$(mmlsfs all | awk -v P=$FILENAME '$1 == P {print $11}') ##Maximum Inodes
       avail=$($max-$used) ##Available Inodes
